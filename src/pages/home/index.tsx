@@ -1,5 +1,5 @@
-import PostForm from "pages/components/posts/PostForm";
-import PostBox from "pages/components/posts/PostBox";
+import PostForm from "components/posts/PostForm";
+import PostBox from "components/posts/PostBox";
 
 export interface PostProps {
   id: string;
