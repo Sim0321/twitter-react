@@ -51,6 +51,19 @@ body {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
+.transparent {
+  background-color: transparent;
+  backdrop-filter: blur(60px);
+}
+
+.sticky {
+  width: 100%;
+  position: sticky;
+  max-width: 600px;
+  margin: 0 auto;
+  top: 0;
+}
+
 // footer
 .footer {
   position: fixed;
@@ -76,8 +89,8 @@ body {
       justify-content: center;
       align-items: center;
       font-size: 15px;
-      background-color: transparent;
       padding: 16px 0;
+      background-color: transparent;
       backdrop-filter: blur(10px);
     }
   }
@@ -85,7 +98,13 @@ body {
 
 // home
 .home {
+  &__top {
+    // @extend .transparent;
+    @extend .sticky;
+  }
   &__title {
+    background-color: transparent;
+    width: 100%;
     padding: 16px;
     font-weight: 700;
     font-size: 20px;
@@ -101,6 +120,7 @@ body {
     font-weight: 500;
     padding: 16px;
     cursor: pointer;
+    background-color: transparent;
 
     &--active {
       font-weight: 700;
