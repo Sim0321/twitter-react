@@ -286,7 +286,7 @@ body {
     margin-bottom: 10px;
   }
 
-  &__btn-submit {
+  &__btn--submit {
     @extend .button;
     width: 100%;
     height: 48px;
@@ -326,5 +326,29 @@ body {
     color: rgb(233, 29, 29);
     font-weight: 500;
     font-size: 15px;
+  }
+
+  &__btn--google {
+    @extend .form__btn--submit;
+    background-color: $white;
+    color: $activeBorder;
+
+    &:hover,
+    &:focus {
+      background-color: $activeBorder;
+      color: $white;
+    }
+  }
+
+  &__btn--github {
+    @extend .form__btn--submit;
+    background-color: black;
+    color: $white;
+
+    &:hover,
+    &:focus {
+      background-color: $activeBg;
+      color: $white;
+    }
   }
 }

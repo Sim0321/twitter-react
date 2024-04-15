@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 import { app } from "firebaseApp";
 import { toast } from "react-toastify";
 
@@ -67,6 +73,37 @@ export default function SignupForm() {
     }
   };
 
+  const onClickSocialLogin = async (e: any) => {
+    const {
+      target: { name },
+    } = e;
+
+    let provider;
+    const auth = getAuth(app);
+
+    if (name === "google") {
+      provider = new GoogleAuthProvider();
+    }
+
+    if (name === "github") {
+      provider = new GithubAuthProvider();
+    }
+
+    await signInWithPopup(
+      auth,
+      provider as GithubAuthProvider | GoogleAuthProvider
+    )
+      .then((result) => {
+        console.log(result);
+        toast.success("로그인 되었습니다.");
+      })
+      .catch((e) => {
+        console.log(e);
+        const errorMessage = e?.message;
+        toast.error(errorMessage);
+      });
+  };
+
   return (
     <form className="form form--lg" onSubmit={onSubmit}>
       <div className="form__title">회원가입</div>
@@ -120,10 +157,31 @@ export default function SignupForm() {
       <div className="form__block--lg">
         <button
           type="submit"
-          className="form__btn-submit"
+          className="form__btn--submit"
           disabled={error?.length > 0}
         >
           회원가입
+        </button>
+      </div>
+
+      <div className="form__block">
+        <button
+          type="button"
+          className="form__btn--google"
+          onClick={onClickSocialLogin}
+          name="google"
+        >
+          Google로 회원가입
+        </button>
+      </div>
+      <div className="form__block">
+        <button
+          type="button"
+          className="form__btn--github"
+          onClick={onClickSocialLogin}
+          name="github"
+        >
+          Github로 회원가입
         </button>
       </div>
     </form>

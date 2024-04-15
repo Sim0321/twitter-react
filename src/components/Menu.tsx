@@ -12,7 +12,6 @@ export default function MenuList() {
   const navigate = useNavigate();
 
   const { user } = useContext(AuthContext);
-  console.log(user);
   return (
     <div className="footer">
       <div className="footer__grid">
