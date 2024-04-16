@@ -1,5 +1,15 @@
 import PostForm from "components/posts/PostForm";
 import PostBox from "components/posts/PostBox";
+import { useContext, useEffect, useState } from "react";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+} from "firebase/firestore";
+import AuthContext from "context/AuthContext";
+import { db } from "firebaseApp";
 
 export interface PostProps {
   id: string;
@@ -13,59 +23,25 @@ export interface PostProps {
   comments?: any;
 }
 
-const posts: PostProps[] = [
-  {
-    id: "1",
-    email: "test@test.com",
-    content: "content 입니다.",
-    createdAt: "2024-04-13",
-    uid: "abc",
-  },
-  {
-    id: "2",
-    email: "test2@test.com",
-    content: "content 입니다2.",
-    createdAt: "2024-04-13",
-    uid: "abc2",
-  },
-  {
-    id: "3",
-    email: "test3@test.com",
-    content: "content 입니다3.",
-    createdAt: "2024-04-13",
-    uid: "abc3",
-  },
-  {
-    id: "4",
-    email: "test4@test.com",
-    content: "content 입니다4.",
-    createdAt: "2024-04-13",
-    uid: "abc4",
-  },
-  {
-    id: "5",
-    email: "test4@test.com",
-    content: "content 입니다5.",
-    createdAt: "2024-04-13",
-    uid: "abc5",
-  },
-  {
-    id: "6",
-    email: "test6@test.com",
-    content: "content 입니다6.",
-    createdAt: "2024-04-13",
-    uid: "abc6",
-  },
-  {
-    id: "7",
-    email: "test7@test.com",
-    content: "content 입니다7.",
-    createdAt: "2024-04-13",
-    uid: "abc7",
-  },
-];
-
 export default function HomePage() {
+  const [posts, setPosts] = useState<PostProps[]>([]);
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (user) {
+      let postsRef = collection(db, "posts");
+      let postsQuery = query(postsRef, orderBy("createdAt", "desc"));
+
+      onSnapshot(postsQuery, (snapshot) => {
+        let dataObj = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setPosts(dataObj as PostProps[]);
+      });
+    }
+  }, [user]);
+
   return (
     <div className="home">
       <div className="home__top">
@@ -79,9 +55,13 @@ export default function HomePage() {
 
       {/* tweet posts */}
       <div className="post">
-        {posts?.map((post) => (
-          <PostBox post={post} key={post.id} />
-        ))}
+        {posts?.length > 0 ? (
+          posts?.map((post) => <PostBox post={post} key={post.id} />)
+        ) : (
+          <div className="post__no-posts">
+            <div className="post__text">게시글이 없습니다.</div>
+          </div>
+        )}
       </div>
     </div>
   );
