@@ -18,7 +18,6 @@ export default function SearchPage() {
   const onChange = (e: any) => {
     setTagQuery(e.target.value.trim());
   };
-  console.log("커밋 이슈번호");
 
   useEffect(() => {
     if (user) {
