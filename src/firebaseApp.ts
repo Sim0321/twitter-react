@@ -19,9 +19,13 @@ try {
   app = initializeApp(firebaseConfig, "app");
 }
 
+// firebase init
 const firebase = initializeApp(firebaseConfig);
 
+// firebase firestore
 export const db = getFirestore(app);
 
+// firebase storage
 export const storage = getStorage(app);
+
 export default firebase;
