@@ -9,15 +9,14 @@ export default function PostForm() {
   const [content, setContent] = useState<string>("");
   const [hashTag, setHashTag] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
-  const [imageFile, setImageFile] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [imageFile, setImageFile] = useState<string | null>(null);
   const { user } = useContext(AuthContext);
 
   const handleFileUpload = (e: any) => {
     const {
       target: { files },
     } = e;
-
-    console.log(files);
 
     const file = files?.[0];
     const fileReader = new FileReader();
@@ -27,6 +26,10 @@ export default function PostForm() {
       const { result } = e?.currentTarget;
       setImageFile(result);
     };
+  };
+
+  const handleDeleteImage = () => {
+    setImageFile(null);
   };
 
   const handleKeyUp = (e: any) => {
@@ -137,6 +140,13 @@ export default function PostForm() {
           {imageFile && (
             <div className="post-form__attachment">
               <img src={imageFile} alt="attachment" width={100} height={100} />
+              <button
+                className="post-form__clear-btn"
+                type="button"
+                onClick={handleDeleteImage}
+              >
+                clear
+              </button>
             </div>
           )}
         </div>
