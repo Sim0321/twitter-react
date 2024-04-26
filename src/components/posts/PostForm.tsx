@@ -1,9 +1,11 @@
 import AuthContext from "context/AuthContext";
 import { addDoc, collection } from "firebase/firestore";
-import { db } from "firebaseApp";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { db, storage } from "firebaseApp";
 import { useContext, useState } from "react";
 import { FiImage } from "react-icons/fi";
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 
 export default function PostForm() {
   const [content, setContent] = useState<string>("");
@@ -12,6 +14,8 @@ export default function PostForm() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<string | null>(null);
   const { user } = useContext(AuthContext);
+
+  // console.log(imageFile);
 
   const handleFileUpload = (e: any) => {
     const {
@@ -47,8 +51,19 @@ export default function PostForm() {
   };
 
   const onSubmit = async (e: any) => {
+    setIsSubmitting(true);
+    const key = `${user?.uid}/${uuidv4()}`; // img이름 중복되지 않기 위해
+    const storageRef = ref(storage, key);
+
     e.preventDefault();
     try {
+      // 이미지 먼저 업로드
+      let imageUrl = "";
+      if (imageFile) {
+        const data = await uploadString(storageRef, imageFile, "data_url");
+        imageUrl = await getDownloadURL(data.ref);
+      }
+      // 업로드된 이미지의 download url 업데이트
       if (user) {
         await addDoc(collection(db, "posts"), {
           content: content,
@@ -60,11 +75,14 @@ export default function PostForm() {
           uid: user.uid,
           email: user.email,
           hashTags: tags,
+          imageUrl: imageUrl,
         });
         setTags([]);
         setHashTag("");
         setContent("");
         toast.success("게시글을 생성했습니다.");
+        setImageFile(null);
+        setIsSubmitting(false);
       }
     } catch (e: any) {
       toast.error(e.code);
@@ -151,7 +169,12 @@ export default function PostForm() {
           )}
         </div>
 
-        <input type="submit" value="Tweet" className="post-form__submit-btn" />
+        <input
+          type="submit"
+          value="Tweet"
+          className="post-form__submit-btn"
+          disabled={isSubmitting}
+        />
       </div>
     </form>
   );
