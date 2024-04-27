@@ -6,6 +6,7 @@ import { useContext, useState } from "react";
 import { FiImage } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
+import PostHeader from "./Header";
 
 export default function PostForm() {
   const [content, setContent] = useState<string>("");
@@ -82,7 +83,6 @@ export default function PostForm() {
         setContent("");
         toast.success("게시글을 생성했습니다.");
         setImageFile(null);
-        setIsSubmitting(false);
       }
     } catch (e: any) {
       toast.error(e.code);
@@ -107,75 +107,83 @@ export default function PostForm() {
     setTags(tags?.filter((val) => val !== tag));
   };
   return (
-    <form className="post-form" onSubmit={onSubmit}>
-      <textarea
-        className="post-form__textarea"
-        name="content"
-        id="content"
-        required
-        placeholder="What is happening?"
-        onChange={onChange}
-        value={content}
-      />
-      <div className="post-form__hashtags">
-        <span className="post-form__hashtags-outputs">
-          {tags?.map((tag, i) => (
-            <span
-              className="post-form__hashtags-tag"
-              key={i}
-              onClick={() => removeTag(tag)}
-            >
-              #{tag}
-            </span>
-          ))}
-        </span>
-
-        <input
-          className="post-form__input"
-          type="text"
-          name="hashtag"
-          id="hashtag"
-          placeholder="해시태그 + 스페이스바 입력"
-          onChange={onChangeHashTag}
-          onKeyUp={handleKeyUp}
-          value={hashTag}
+    <div className="post">
+      <PostHeader />
+      <form className="post-form" onSubmit={onSubmit}>
+        <textarea
+          className="post-form__textarea"
+          name="content"
+          id="content"
+          required
+          placeholder="What is happening?"
+          onChange={onChange}
+          value={content}
         />
-      </div>
-
-      <div className="post-form__submit-area">
-        <div className="post-form__image-area">
-          <label htmlFor="file-input" className="post-form__file">
-            <FiImage className="post-form__file-icon" />
-          </label>
-          <input
-            type="file"
-            name="file-input"
-            id="file-input"
-            accept="image/*"
-            onChange={handleFileUpload}
-            className="hidden"
-          />
-          {imageFile && (
-            <div className="post-form__attachment">
-              <img src={imageFile} alt="attachment" width={100} height={100} />
-              <button
-                className="post-form__clear-btn"
-                type="button"
-                onClick={handleDeleteImage}
+        <div className="post-form__hashtags">
+          <span className="post-form__hashtags-outputs">
+            {tags?.map((tag, i) => (
+              <span
+                className="post-form__hashtags-tag"
+                key={i}
+                onClick={() => removeTag(tag)}
               >
-                clear
-              </button>
-            </div>
-          )}
+                #{tag}
+              </span>
+            ))}
+          </span>
+
+          <input
+            className="post-form__input"
+            type="text"
+            name="hashtag"
+            id="hashtag"
+            placeholder="해시태그 + 스페이스바 입력"
+            onChange={onChangeHashTag}
+            onKeyUp={handleKeyUp}
+            value={hashTag}
+          />
         </div>
 
-        <input
-          type="submit"
-          value="Tweet"
-          className="post-form__submit-btn"
-          disabled={isSubmitting}
-        />
-      </div>
-    </form>
+        <div className="post-form__submit-area">
+          <div className="post-form__image-area">
+            <label htmlFor="file-input" className="post-form__file">
+              <FiImage className="post-form__file-icon" />
+            </label>
+            <input
+              type="file"
+              name="file-input"
+              id="file-input"
+              accept="image/*"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            {imageFile && (
+              <div className="post-form__attachment">
+                <img
+                  src={imageFile}
+                  alt="attachment"
+                  width={100}
+                  height={100}
+                />
+                <button
+                  className="post-form__clear-btn"
+                  type="button"
+                  onClick={handleDeleteImage}
+                >
+                  clear
+                </button>
+              </div>
+            )}
+          </div>
+
+          <input
+            type="submit"
+            value="Tweet"
+            className="post-form__submit-btn"
+            disabled={isSubmitting}
+          />
+        </div>
+      </form>
+    </div>
   );
 }
