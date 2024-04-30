@@ -80,7 +80,6 @@ export default function PostEditForm() {
         }
 
         // 만약 사진이 아예 없다면 삭제
-
         const postRef = doc(db, "posts", post?.id);
         await updateDoc(postRef, {
           content: content,
