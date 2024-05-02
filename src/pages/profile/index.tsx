@@ -47,6 +47,8 @@ export default function ProfilePage() {
             src={user?.photoURL || PROFILE_DEFAULT_URL}
             alt="profile"
             className="profile__image"
+            width={100}
+            height={100}
           />
           <button
             type="button"
