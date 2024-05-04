@@ -83,6 +83,7 @@ export default function PostForm() {
         setContent("");
         toast.success("게시글을 생성했습니다.");
         setImageFile(null);
+        setIsSubmitting(false);
       }
     } catch (e: any) {
       toast.error(e.code);

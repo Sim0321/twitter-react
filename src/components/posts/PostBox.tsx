@@ -1,10 +1,16 @@
 import { FaCircleUser, FaRegComment } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
-import { AiFillHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { PostProps } from "pages/home";
 import { useContext } from "react";
 import AuthContext from "context/AuthContext";
-import { deleteDoc, doc } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { db, storage } from "firebaseApp";
 import { toast } from "react-toastify";
 import { deleteObject, ref } from "firebase/storage";
@@ -31,6 +37,24 @@ export default function PostBox({ post }: PostBoxProps) {
       await deleteDoc(doc(db, "posts", post.id));
       toast.success("게시글을 삭제했습니다.");
       navigate("/");
+    }
+  };
+
+  const toggleLike = async () => {
+    const postRef = doc(db, "posts", post.id);
+
+    // 이미 좋아요인 경우 -> 좋아요 취소
+    if (user?.uid && post?.likes?.includes(user?.uid)) {
+      await updateDoc(postRef, {
+        likes: arrayRemove(user?.uid),
+        likeCount: post?.likeCount ? post?.likeCount - 1 : 0,
+      });
+    } else {
+      // 좋아요가 아닌 경우 -> 좋아요 추가
+      await updateDoc(postRef, {
+        likes: arrayUnion(user?.uid),
+        likeCount: post?.likeCount ? post?.likeCount + 1 : 1,
+      });
     }
   };
 
@@ -85,20 +109,21 @@ export default function PostBox({ post }: PostBoxProps) {
             <button type="button" className="post__edit">
               <Link to={`/posts/edit/${post?.id}`}>Edit</Link>
             </button>
-            <button
-              type="button"
-              className="post__likes"
-              onClick={handleDelete}
-            >
-              <AiFillHeart />
-              {post?.likeCount || 0}
-            </button>
-            <button type="button" className="post__comments">
-              <FaRegComment />
-              {post.comments?.length || 0}
-            </button>
           </>
         )}
+
+        <button type="button" className="post__likes" onClick={toggleLike}>
+          {user && post?.likes?.includes(user.uid) ? (
+            <AiFillHeart />
+          ) : (
+            <AiOutlineHeart />
+          )}
+          {post?.likeCount || 0}
+        </button>
+        <button type="button" className="post__comments">
+          <FaRegComment />
+          {post.comments?.length || 0}
+        </button>
       </div>
     </div>
   );
