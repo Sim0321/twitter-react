@@ -339,8 +339,7 @@ body {
     background-color: $activeBorder;
     color: $white;
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: $white;
       color: $activeBorder;
     }
@@ -351,8 +350,7 @@ body {
     background-color: $white;
     color: $activeBorder;
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: $activeBorder;
       color: $white;
     }
