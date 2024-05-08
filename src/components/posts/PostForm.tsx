@@ -7,6 +7,7 @@ import { FiImage } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import PostHeader from "./Header";
+import useTranslation from "hooks/useTranslation";
 
 export default function PostForm() {
   const [content, setContent] = useState<string>("");
@@ -15,8 +16,7 @@ export default function PostForm() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<string | null>(null);
   const { user } = useContext(AuthContext);
-
-  // console.log(imageFile);
+  const translation = useTranslation();
 
   const handleFileUpload = (e: any) => {
     const {
@@ -116,7 +116,7 @@ export default function PostForm() {
           name="content"
           id="content"
           required
-          placeholder="What is happening?"
+          placeholder={translation("POST_PLACEHOLDER")}
           onChange={onChange}
           value={content}
         />
@@ -138,7 +138,7 @@ export default function PostForm() {
             type="text"
             name="hashtag"
             id="hashtag"
-            placeholder="해시태그 + 스페이스바 입력"
+            placeholder={translation("POST_HASHTAG")}
             onChange={onChangeHashTag}
             onKeyUp={handleKeyUp}
             value={hashTag}
@@ -171,7 +171,7 @@ export default function PostForm() {
                   type="button"
                   onClick={handleDeleteImage}
                 >
-                  clear
+                  {translation("BUTTON_DELETE")}
                 </button>
               </div>
             )}

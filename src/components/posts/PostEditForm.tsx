@@ -14,6 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import PostHeader from "./Header";
+import useTranslation from "hooks/useTranslation";
 
 export default function PostEditForm() {
   const [content, setContent] = useState<string>("");
@@ -27,6 +28,7 @@ export default function PostEditForm() {
   const [imageFile, setImageFile] = useState<string | null>(null);
 
   const { user } = useContext(AuthContext);
+  const translation = useTranslation();
 
   const handleFileUpload = (e: any) => {
     const {
@@ -208,7 +210,7 @@ export default function PostEditForm() {
           </div>
           <input
             type="submit"
-            value="수정"
+            value={translation("BUTTON_EDIT")}
             className="post-form__submit-btn"
             disabled={isSubmitting}
           />
