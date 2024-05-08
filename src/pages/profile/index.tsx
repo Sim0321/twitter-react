@@ -9,6 +9,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "firebaseApp";
+import useTranslation from "hooks/useTranslation";
 import { PostProps } from "pages/home";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +25,8 @@ export default function ProfilePage() {
   const [likePosts, setLikePosts] = useState<PostProps[]>([]);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const translation = useTranslation();
 
   const [language, setLanguage] = useRecoilState(languageState);
 
@@ -123,7 +126,7 @@ export default function ProfilePage() {
               myPosts?.map((post) => <PostBox post={post} key={post.id} />)
             ) : (
               <div className="post__no-posts">
-                <div className="post__text">게시글이 없습니다.</div>
+                <div className="post__text">{translation("NO_POSTS")}</div>
               </div>
             )}
           </div>
@@ -135,7 +138,7 @@ export default function ProfilePage() {
               likePosts?.map((post) => <PostBox post={post} key={post.id} />)
             ) : (
               <div className="post__no-posts">
-                <div className="post__text">게시글이 없습니다.</div>
+                <div className="post__text">{translation("NO_POSTS")}</div>
               </div>
             )}
           </div>

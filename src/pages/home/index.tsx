@@ -12,6 +12,7 @@ import {
 import AuthContext from "context/AuthContext";
 import { db } from "firebaseApp";
 import { UserProps } from "components/following/FollowingBox";
+import useTranslation from "hooks/useTranslation";
 
 export interface PostProps {
   id: string;
@@ -35,6 +36,8 @@ export default function HomePage() {
   const [followingIds, setFollowingIds] = useState<string[]>([""]);
   const [activeTab, setActiveTab] = useState<tabType>("all");
   const { user } = useContext(AuthContext);
+
+  const translation = useTranslation();
 
   // 실시간 동기화로 user의 팔로잉 id array 가져오기
   const getFollowingIds = useCallback(async () => {
@@ -96,7 +99,7 @@ export default function HomePage() {
             }`}
             onClick={() => setActiveTab("all")}
           >
-            All
+            {translation("TAB_ALL")}
           </div>
           <div
             className={`home__tab ${
@@ -104,7 +107,7 @@ export default function HomePage() {
             }`}
             onClick={() => setActiveTab("following")}
           >
-            Following
+            {translation("TAB_FOLLOWING")}
           </div>
         </div>
       </div>
@@ -117,7 +120,7 @@ export default function HomePage() {
             posts?.map((post) => <PostBox post={post} key={post.id} />)
           ) : (
             <div className="post__no-posts">
-              <div className="post__text">게시글이 없습니다.</div>
+              <div className="post__text">{translation("NO_POSTS")}</div>
             </div>
           )}
         </div>
@@ -129,7 +132,7 @@ export default function HomePage() {
             followingPosts?.map((post) => <PostBox post={post} key={post.id} />)
           ) : (
             <div className="post__no-posts">
-              <div className="post__text">게시글이 없습니다.</div>
+              <div className="post__text">{translation("NO_POSTS")}</div>
             </div>
           )}
         </div>
