@@ -21,7 +21,6 @@ export interface NotificationProps {
 export default function NotificationPage() {
   const { user } = useContext(AuthContext);
   const [notifications, setNotifications] = useState<NotificationProps[]>([]);
-  console.log(notifications);
 
   useEffect(() => {
     if (user) {
