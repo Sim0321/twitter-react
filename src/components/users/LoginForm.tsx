@@ -128,7 +128,7 @@ export default function LoginForm() {
       <div className="form__block">
         {translation("NO_ACCOUNT")}
         <Link to="/users/signup" className="form__link">
-          {translation("SIGNUP_LINK")}
+          {translation("SIGNIN_LINK")}
         </Link>
       </div>
       <div className="form__block--lg">
